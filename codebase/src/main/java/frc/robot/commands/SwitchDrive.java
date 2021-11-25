@@ -57,7 +57,7 @@ public class SwitchDrive extends CommandBase {
         double rightTrigger = m_joystick.getTriggerAxis(Hand.kRight);
         double leftTrigger = m_joystick.getTriggerAxis(Hand.kLeft);
 
-        double lAxis = m_joystick.getX(Hand.kLeft);
+        double lAxis = m_joystick.getX(Hand.kLeft) * -1;
 
         sys_drive.aadlDrive(rightTrigger, leftTrigger, lAxis);
     }

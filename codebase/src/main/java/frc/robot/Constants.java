@@ -18,10 +18,10 @@ public final class Constants {
     public static class kDriveTrain {
         // Motor ports
         public static final int CANLeftDriveFront = 1;
-        public static final int CANLeftDriveRear = 2;
+        public static final int CANLeftDriveRear = 4;
         
-        public static final int CANRightDriveFront = 0;
-        public static final int CANRightDriveRear = 3;
+        public static final int CANRightDriveFront = 3;
+        public static final int CANRightDriveRear = 2;
 
         // Drive mode constants
         public static final int AADL_DRIVE = 1; // Addl Drive (Arcade drive)
