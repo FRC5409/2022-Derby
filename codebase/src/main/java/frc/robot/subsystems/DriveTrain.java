@@ -46,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
      */
     public void periodic() {
         displayDriveModeData();
-        // displayEncoderData();
+        displayEncoderData();
 
         SmartDashboard.putString("Drive Mode", getDriveModeName());
     }
@@ -138,15 +138,15 @@ public class DriveTrain extends SubsystemBase {
     /**
      * This method will display encoder data.
      */
-    // public void displayEncoderData() {
-    //     double velocity = mot_leftFrontDrive.getSelectedSensorVelocity();
+    public void displayEncoderData() {
+        double velocity = mot_leftFrontDrive.getSelectedSensorVelocity();
 
-    //     SmartDashboard.putNumber("MOT_FL_VEL", velocity);
-    // }
+        SmartDashboard.putNumber("MOT_FL_VEL", velocity);
+    }
 
-    // public double getVelocity() {
-    //     return mot_leftFrontDrive.getSelectedSensorVelocity();
-    // }
+    public double getVelocity() {
+        return mot_leftFrontDrive.getSelectedSensorVelocity();
+    }
 
     /**
      * This method will rotate the motors with the given parameters
