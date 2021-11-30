@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -139,13 +140,16 @@ public class DriveTrain extends SubsystemBase {
      * This method will display encoder data.
      */
     public void displayEncoderData() {
-        double velocity = mot_leftFrontDrive.getSelectedSensorVelocity();
-
-        SmartDashboard.putNumber("MOT_FL_VEL", velocity);
+        SmartDashboard.putNumber("MOT_FL_VEL", getSensorVelocity());
+        SmartDashboard.putNumber("MOT_FL_POS", getSensorPosition());
     }
 
-    public double getVelocity() {
+    public double getSensorVelocity() {
         return mot_leftFrontDrive.getSelectedSensorVelocity();
+    }
+
+    public double getSensorPosition() {
+        return mot_leftFrontDrive.getSelectedSensorPosition();
     }
 
     /**
