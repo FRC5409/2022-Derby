@@ -17,8 +17,9 @@ public class SwitchDrive extends CommandBase {
 
     /**
      * Constructor for the SwitchDrive command
-     * @param sys_drive     DruveTrain subsystem
-     * @param joystick      Joystick
+     * 
+     * @param sys_drive DruveTrain subsystem
+     * @param joystick  Joystick
      */
     public SwitchDrive(DriveTrain sys_drive, XboxController joystick) {
         this.sys_drive = sys_drive;
@@ -27,23 +28,27 @@ public class SwitchDrive extends CommandBase {
         addRequirements(sys_drive);
     }
 
-    /** Called every time the scheduler runs while the command is scheduled.
-     *  Will call the drive mode based on the current drive mode. 
+    /**
+     * Called every time the scheduler runs while the command is scheduled. Will
+     * call the drive mode based on the current drive mode.
      */
     @Override
     public void execute() {
         switch (sys_drive.getDriveMode()) {
-            case kDriveTrain.AADL_DRIVE: // 1
-                defaultDriveExecute();
+            case kDriveTrain.ARCADE_DRIVE: // 1
+                arcadeDriveExecute();
                 break;
-            case kDriveTrain.C_DRIVE: // 2
+            case kDriveTrain.AADL_DRIVE: // 2
+                addlDriveExecute();
+                break;
+            case kDriveTrain.C_DRIVE: // 3
                 curvatureDriveExecute();
                 break;
-            case kDriveTrain.T_DRIVE: // 3
+            case kDriveTrain.T_DRIVE: // 4
                 tankDriveExecute();
                 break;
             default:
-                defaultDriveExecute();
+                arcadeDriveExecute();
                 break;
         }
 
@@ -51,9 +56,23 @@ public class SwitchDrive extends CommandBase {
     }
 
     /**
+     * This method will get input values and run the arcade drive method.
+     */
+    private void arcadeDriveExecute() {
+        double lAxisX = m_joystick.getX(Hand.kLeft) * -1;
+
+        double lAxisY = m_joystick.getY(Hand.kLeft) * -1;
+
+        // if (lAxisY < 0)
+        //     lAxisX *= -1;
+
+        sys_drive.arcadeDrive(lAxisY, lAxisX);
+    }
+
+    /**
      * This method will get input values and run the addlDrive method.
      */
-    private void defaultDriveExecute() {
+    private void addlDriveExecute() {
         double rightTrigger = m_joystick.getTriggerAxis(Hand.kRight);
         double leftTrigger = m_joystick.getTriggerAxis(Hand.kLeft);
 
@@ -82,6 +101,6 @@ public class SwitchDrive extends CommandBase {
         double leftSpeed = m_joystick.getY(Hand.kLeft) * -1;
         double rightSpeed = m_joystick.getY(Hand.kRight) * -1;
 
-        sys_drive.tankDrive((float)leftSpeed, (float)rightSpeed);
+        sys_drive.tankDrive((float) leftSpeed, (float) rightSpeed);
     }
 }

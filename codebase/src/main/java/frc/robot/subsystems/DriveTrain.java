@@ -6,7 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,28 +23,33 @@ public class DriveTrain extends SubsystemBase {
     private final WPI_TalonSRX mot_rightRearDrive;
 
     private final DifferentialDrive m_drive;
-    private int m_driveMode = kDriveTrain.AADL_DRIVE;
+    private int m_driveMode = kDriveTrain.ARCADE_DRIVE;
+
+    private final Solenoid dsl_gear;
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
         mot_leftFrontDrive = new WPI_TalonSRX(kDriveTrain.CANLeftDriveFront); // Has encoder
-        mot_leftFrontDrive.setInverted(true);
+        // mot_leftFrontDrive.setInverted(true);
 
         mot_leftRearDrive = new WPI_TalonSRX(kDriveTrain.CANLeftDriveRear);
         mot_leftRearDrive.follow(mot_leftFrontDrive);
 
         mot_rightFrontDrive = new WPI_TalonSRX(kDriveTrain.CANRightDriveFront); // Has encoder
-        // mot_rightFrontDrive.setInverted(true);
+        mot_rightFrontDrive.setInverted(true);
 
         mot_rightRearDrive = new WPI_TalonSRX(kDriveTrain.CANRightDriveRear);
         mot_rightRearDrive.follow(mot_rightFrontDrive);
 
         // flt_leftFront = mot_leftFrontDrive.getFaults(toFill)
         m_drive = new DifferentialDrive(mot_leftFrontDrive, mot_rightFrontDrive);
+
+        dsl_gear = new Solenoid(5);
     }
 
     /**
-     * This method is called once per scheuler run and is used to update smart dashboard data.
+     * This method is called once per scheuler run and is used to update smart
+     * dashboard data.
      */
     public void periodic() {
         displayDriveModeData();
@@ -63,8 +69,8 @@ public class DriveTrain extends SubsystemBase {
     public void nextDriveMode() {
         m_driveMode++;
 
-        if (m_driveMode > 3)
-            m_driveMode = kDriveTrain.AADL_DRIVE;
+        if (m_driveMode > 4)
+            m_driveMode = kDriveTrain.ARCADE_DRIVE;
     }
 
     /**
@@ -95,6 +101,8 @@ public class DriveTrain extends SubsystemBase {
      */
     public String getDriveModeName() {
         switch (m_driveMode) {
+            case kDriveTrain.ARCADE_DRIVE:
+                return "ARCADE DRIVE";
             case kDriveTrain.AADL_DRIVE:
                 return "AADL DRIVE";
             case kDriveTrain.C_DRIVE:
@@ -102,7 +110,7 @@ public class DriveTrain extends SubsystemBase {
             case kDriveTrain.T_DRIVE:
                 return "TANK DRIVE";
             default:
-                return "AADL DRIVE";
+                return "ARCADE DRIVE";
         }
     }
 
@@ -112,6 +120,15 @@ public class DriveTrain extends SubsystemBase {
      */
     public void displayDriveModeData() {
         switch (m_driveMode) {
+            case kDriveTrain.ARCADE_DRIVE:
+                SmartDashboard.delete("CD_Speed");
+                SmartDashboard.delete("CD_Turn");
+                SmartDashboard.delete("CD_Quik Turn");
+
+                SmartDashboard.delete("TD_Left Speed");
+                SmartDashboard.delete("TD_Right Speed");
+                SmartDashboard.delete("AD_Acceleration");
+                break;
             case kDriveTrain.AADL_DRIVE:
                 SmartDashboard.delete("CD_Speed");
                 SmartDashboard.delete("CD_Turn");
@@ -140,8 +157,10 @@ public class DriveTrain extends SubsystemBase {
      * This method will display encoder data.
      */
     public void displayEncoderData() {
-        SmartDashboard.putNumber("MOT_FL_VEL", getSensorVelocity());
-        SmartDashboard.putNumber("MOT_FL_POS", getSensorPosition());
+        double velocity = getSensorVelocity();
+        double sensorPos = getSensorPosition();
+        SmartDashboard.putNumber("MOT_FL_VEL", velocity);
+        SmartDashboard.putNumber("MOT_FL_POS", sensorPos);
     }
 
     public double getSensorVelocity() {
@@ -150,6 +169,12 @@ public class DriveTrain extends SubsystemBase {
 
     public double getSensorPosition() {
         return mot_leftFrontDrive.getSelectedSensorPosition();
+    }
+
+    public void arcadeDrive(final double acceleration, final double turn) {
+
+        m_drive.arcadeDrive(acceleration, turn, true);
+        SmartDashboard.putNumber("ARC_Acceleration", acceleration);
     }
 
     /**
@@ -191,5 +216,13 @@ public class DriveTrain extends SubsystemBase {
 
         SmartDashboard.putNumber("TD_Left Speed", leftSpeed);
         SmartDashboard.putNumber("TD_Right Speed", rightSpeed);
+    }
+
+    public void fastShift() {
+        dsl_gear.set(true);
+    }
+
+    public void slowShift() {
+        dsl_gear.set(false);
     }
 }

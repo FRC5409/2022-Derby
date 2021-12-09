@@ -7,9 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.FastGear;
 import frc.robot.commands.SimpleDriveAuto;
+import frc.robot.commands.SlowGear;
 import frc.robot.commands.SwitchDrive;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Pneumatics;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -26,11 +29,13 @@ public class RobotContainer {
   private final JoystickButton but_main_A, but_main_B, but_main_X, but_main_Y, but_main_LBumper, but_main_RBumper,
       but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
 
+  private final Pneumatics sys_Pneumatics;
+
   // Define drive train subsystem
-  private final DriveTrain sys_DriveTrain;// = new DriveTrain();
+  private final DriveTrain sys_DriveTrain;
 
   // Define default command
-  private final SwitchDrive cmd_defaultDrive; // = new DefaultDriveCommand(m_drivetrain, m_joystick_main);
+  private final SwitchDrive cmd_defaultDrive;
 
   
   /**
@@ -51,6 +56,8 @@ public class RobotContainer {
     but_main_RAnalog = new JoystickButton(m_joystick_main, XboxController.Button.kStickRight.value);
     but_main_Back = new JoystickButton(m_joystick_main, XboxController.Button.kBack.value);
     but_main_Start = new JoystickButton(m_joystick_main, XboxController.Button.kStart.value);
+
+    sys_Pneumatics = new Pneumatics();
 
     // Init sub systems
     sys_DriveTrain = new DriveTrain();
@@ -77,6 +84,11 @@ public class RobotContainer {
 
     // Bind right analog to switch to next drive mode
     but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
+
+    but_main_RBumper.whenPressed(() -> new FastGear(sys_DriveTrain));
+    but_main_RBumper.whenReleased(() -> new SlowGear(sys_DriveTrain));
+
+    but_main_Start.whenPressed(() -> sys_Pneumatics.turnOff());
   }
 
   /**
