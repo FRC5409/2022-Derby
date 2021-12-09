@@ -24,8 +24,12 @@ public final class Constants {
         public static final int CANRightDriveRear = 2;
 
         // Drive mode constants
-        public static final int AADL_DRIVE = 1; // Addl Drive (Arcade drive)
-        public static final int C_DRIVE = 2; // Curvature drive
-        public static final int T_DRIVE = 3; // Tank Drive
+        public static final int ARCADE_DRIVE = 1; // Arcade Drive
+        public static final int AADL_DRIVE = 2; // Addl Drive (Arcade drive)
+        public static final int C_DRIVE = 3; // Curvature drive
+        public static final int T_DRIVE = 4; // Tank Drive
+
+        public static final double UP_SHIFT = 300;
+        public static final double DOWN_SHIFT = 260;
     }
 }

@@ -4,12 +4,16 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.kDriveTrain;
 
 /**
@@ -22,7 +26,11 @@ public class DriveTrain extends SubsystemBase {
     private final WPI_TalonSRX mot_rightRearDrive;
 
     private final DifferentialDrive m_drive;
-    private int m_driveMode = kDriveTrain.AADL_DRIVE;
+    private int m_driveMode = kDriveTrain.ARCADE_DRIVE;
+
+    private final Solenoid dsl_gear;
+    private boolean m_allowShift = false;
+    private long m_timeSinceShift = 0;
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
@@ -38,14 +46,44 @@ public class DriveTrain extends SubsystemBase {
         mot_rightRearDrive = new WPI_TalonSRX(kDriveTrain.CANRightDriveRear);
         mot_rightRearDrive.follow(mot_rightFrontDrive);
 
+        mot_leftFrontDrive.configPeakCurrentLimit(40);
+        mot_leftRearDrive.configPeakCurrentLimit(40);
+        mot_rightFrontDrive.configPeakCurrentLimit(40);
+        mot_rightRearDrive.configPeakCurrentLimit(40);
+
+        mot_leftFrontDrive.setNeutralMode(NeutralMode.Brake);
+        mot_leftRearDrive.setNeutralMode(NeutralMode.Brake);
+        mot_rightFrontDrive.setNeutralMode(NeutralMode.Brake);
+        mot_rightRearDrive.setNeutralMode(NeutralMode.Brake);
+
         // flt_leftFront = mot_leftFrontDrive.getFaults(toFill)
         m_drive = new DifferentialDrive(mot_leftFrontDrive, mot_rightFrontDrive);
+
+        dsl_gear = new Solenoid(0);
+        // dsl_gear.set(true);
+        // dsl_gear.toggle();
+
+        SmartDashboard.putData(dsl_gear);
     }
 
     /**
      * This method is called once per scheuler run and is used to update smart dashboard data.
      */
     public void periodic() {
+        // double vel = getSensorVelocity();
+
+        // long currentTime = System.currentTimeMillis();
+
+        // if (currentTime - m_timeSinceShift >= 1000) {
+        //     if (Math.abs(vel) >= Constants.kDriveTrain.UP_SHIFT && !dsl_gear.get()) {
+        //         fastShift();
+        //     } else if (Math.abs(vel) <= Constants.kDriveTrain.DOWN_SHIFT && dsl_gear.get()) {
+        //         slowShift();
+        //     }
+
+        //     m_timeSinceShift = currentTime;
+        // }
+
         displayDriveModeData();
         displayEncoderData();
 
@@ -145,11 +183,17 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public double getSensorVelocity() {
-        return mot_leftFrontDrive.getSelectedSensorVelocity();
+        return mot_rightFrontDrive.getSelectedSensorVelocity();
     }
 
     public double getSensorPosition() {
-        return mot_leftFrontDrive.getSelectedSensorPosition();
+        return mot_leftRearDrive.getSelectedSensorPosition();
+    }
+
+    public void arcadeDrive(final double acceleration, final double turn) {
+
+        m_drive.arcadeDrive(acceleration, turn, true);
+        SmartDashboard.putNumber("ADS_Acceleration", acceleration);
     }
 
     /**
@@ -163,7 +207,7 @@ public class DriveTrain extends SubsystemBase {
         double accelrate = acceleration - deceleration;
 
         m_drive.arcadeDrive(accelrate, turn, true);
-        SmartDashboard.putNumber("AD_Acceleration", accelrate);
+        SmartDashboard.putNumber("ADA_Acceleration", accelrate);
     }
 
     /**
@@ -191,5 +235,13 @@ public class DriveTrain extends SubsystemBase {
 
         SmartDashboard.putNumber("TD_Left Speed", leftSpeed);
         SmartDashboard.putNumber("TD_Right Speed", rightSpeed);
+    }
+
+    public void fastShift() {
+        dsl_gear.set(true);
+    }
+
+    public void slowShift() {
+        dsl_gear.set(false);
     }
 }

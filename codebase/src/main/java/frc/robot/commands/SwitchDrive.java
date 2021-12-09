@@ -67,7 +67,7 @@ public class SwitchDrive extends CommandBase {
      */
     private void curvatureDriveExecute() {
         double speed = m_joystick.getY(Hand.kLeft) * -1;
-        double turn = m_joystick.getX(Hand.kLeft);
+        double turn = m_joystick.getX(Hand.kLeft) * -1;
 
         // true if the 'b' button on the controller is pressed
         boolean quickTurn = m_joystick.getBButton();
