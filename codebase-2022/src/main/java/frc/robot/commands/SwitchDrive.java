@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
@@ -54,8 +53,8 @@ public class SwitchDrive extends CommandBase {
     }
 
     private void arcadeDriveExecute() {
-        double acceleration = m_joystick.getY(Hand.kLeft) * -1;
-        double turn = m_joystick.getX(Hand.kLeft);
+        double acceleration = m_joystick.getLeftY() * -1;
+        double turn = m_joystick.getLeftX();
 
         sys_drive.arcadeDrive(acceleration, turn);
     }
@@ -64,10 +63,10 @@ public class SwitchDrive extends CommandBase {
      * This method will get input values and run the addlDrive method.
      */
     private void defaultDriveExecute() {
-        double rightTrigger = m_joystick.getTriggerAxis(Hand.kRight);
-        double leftTrigger = m_joystick.getTriggerAxis(Hand.kLeft);
+        double rightTrigger = m_joystick.getRightTriggerAxis();
+        double leftTrigger = m_joystick.getLeftTriggerAxis();
 
-        double lAxis = m_joystick.getX(Hand.kLeft) * -1;
+        double lAxis = m_joystick.getLeftX() * -1;
 
         sys_drive.aadlDrive(rightTrigger, leftTrigger, lAxis);
     }
@@ -76,8 +75,8 @@ public class SwitchDrive extends CommandBase {
      * This method will get input values and run the curvDrive method.
      */
     private void curvatureDriveExecute() {
-        double speed = m_joystick.getY(Hand.kLeft) * -1;
-        double turn = m_joystick.getX(Hand.kLeft) * -1;
+        double speed = m_joystick.getLeftY() * -1;
+        double turn = m_joystick.getLeftX() * -1;
 
         // true if the 'b' button on the controller is pressed
         boolean quickTurn = m_joystick.getBButton();
@@ -89,8 +88,8 @@ public class SwitchDrive extends CommandBase {
      * This method will get input values and run the tankDrive method.
      */
     public void tankDriveExecute() {
-        double leftSpeed = m_joystick.getY(Hand.kLeft) * -1;
-        double rightSpeed = m_joystick.getY(Hand.kRight) * -1;
+        double leftSpeed = m_joystick.getLeftY() * -1;
+        double rightSpeed = m_joystick.getRightY() * -1;
 
         sys_drive.tankDrive((float)leftSpeed, (float)rightSpeed);
     }

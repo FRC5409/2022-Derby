@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -62,9 +62,11 @@ public final class Constants {
         // seconds
         public static final double RamseteB = 2;
         public static final double RamseteZeta = 0.7;
+        public static final int CANPigeon = 0;
     }
 
     public static class kPneumatics {
         public static final int PCMId = 0;
+        public static final int MODULE = 0;
     }
 }
