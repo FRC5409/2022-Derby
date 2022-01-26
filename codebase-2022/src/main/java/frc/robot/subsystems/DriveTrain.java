@@ -26,57 +26,57 @@ import frc.robot.Constants.kDriveTrain;
  * DriveTrain subsystem
  */
 public class DriveTrain extends SubsystemBase {
-    private final WPI_TalonSRX mot_leftFrontDrive;
-    private final CANSparkMax mot_leftRearDrive;
-    private final WPI_TalonSRX mot_rightFrontDrive;
-    private final CANSparkMax mot_rightRearDrive;
+    private final WPI_TalonSRX leftTalon;
+    private final CANSparkMax leftNeo;
+    private final WPI_TalonSRX rightTalon;
+    private final CANSparkMax rightNeo;
 
     private final DifferentialDrive m_drive;
-    private int m_driveMode = kDriveTrain.ARCADE_DRIVE;
+    private int m_driveMode = kDriveTrain.AADL_DRIVE;
 
-    private final Solenoid ssl_gear;
+    // private final Solenoid ssl_gear;
     private boolean m_allowShift = false;
     private long m_timeSinceShift = 0;
 
-    private final WPI_Pigeon2 gyro_pigeon;
-    private final DifferentialDriveOdometry dOdometry;
+    // private final WPI_Pigeon2 gyro_pigeon;
+    // private final DifferentialDriveOdometry dOdometry;
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
-        mot_leftFrontDrive = new WPI_TalonSRX(kDriveTrain.CANLeftDriveFront); // Has encoder
-        // mot_leftFrontDrive.setInverted(true);
+        leftTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_TALON); // Has encoder
+        leftTalon.setInverted(false);
 
-        mot_leftRearDrive = new CANSparkMax(kDriveTrain.CANLeftDriveRear, MotorType.kBrushless);
-        mot_leftRearDrive.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CANLeftDriveFront);
+        leftNeo = new CANSparkMax(kDriveTrain.CAN_LEFT_NEO, MotorType.kBrushless);
+        leftNeo.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CAN_LEFT_TALON, false);
 
-        mot_rightFrontDrive = new WPI_TalonSRX(kDriveTrain.CANRightDriveFront); // Has encoder
-        mot_rightFrontDrive.setInverted(true);
+        rightTalon = new WPI_TalonSRX(kDriveTrain.CAN_RIGHT_TALON); // Has encoder
+        rightTalon.setInverted(true);
 
-        mot_rightRearDrive = new CANSparkMax(kDriveTrain.CANRightDriveRear, MotorType.kBrushless);
-        mot_rightRearDrive.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CANRightDriveFront);
+        rightNeo = new CANSparkMax(kDriveTrain.CAN_RIGHT_NEO, MotorType.kBrushless);
+        rightNeo.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CAN_RIGHT_TALON, true);
 
-        mot_leftFrontDrive.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        mot_leftRearDrive.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        mot_rightFrontDrive.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        mot_rightRearDrive.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        leftTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        leftNeo.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        rightTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        rightNeo.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
-        mot_leftFrontDrive.setNeutralMode(NeutralMode.Brake);
-        mot_leftRearDrive.setIdleMode(IdleMode.kBrake);
-        mot_rightFrontDrive.setNeutralMode(NeutralMode.Brake);
-        mot_rightRearDrive.setIdleMode(IdleMode.kBrake);
+        leftTalon.setNeutralMode(NeutralMode.Coast);
+        leftNeo.setIdleMode(IdleMode.kCoast);
+        rightTalon.setNeutralMode(NeutralMode.Coast);
+        rightNeo.setIdleMode(IdleMode.kCoast);
 
         // mot_leftFrontDrive.configPul
 
         // mot_rightFrontDrive.getStatorCurrent();
 
-        m_drive = new DifferentialDrive(mot_leftFrontDrive, mot_rightFrontDrive);
+        m_drive = new DifferentialDrive(leftTalon, rightTalon);
 
-        ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
-        SmartDashboard.putData(ssl_gear);
+        // SmartDashboard.putData(ssl_gear);
 
-        gyro_pigeon = new WPI_Pigeon2(Constants.kDriveTrain.CANPigeon);
-        dOdometry = new DifferentialDriveOdometry(gyro_pigeon.getRotation2d());
+        // gyro_pigeon = new WPI_Pigeon2(Constants.kDriveTrain.CANPigeon);
+        // dOdometry = new DifferentialDriveOdometry(gyro_pigeon.getRotation2d());
     }
 
     /**
@@ -100,7 +100,7 @@ public class DriveTrain extends SubsystemBase {
         // }
 
         displayDriveModeData();
-        // displayEncoderData();
+        displayEncoderData();
 
         SmartDashboard.putString("Drive Mode", getDriveModeName());
 
@@ -213,16 +213,17 @@ public class DriveTrain extends SubsystemBase {
      * This method will display encoder data.
      */
     public void displayEncoderData() {
-        SmartDashboard.putNumber("MOT_FL_VEL", getSensorVelocity());
-        SmartDashboard.putNumber("MOT_FL_POS", getSensorPosition());
+        // SmartDashboard.putNumber("MOT_FL_VEL", getSensorVelocity());
+        // SmartDashboard.putNumber("MOT_FL_POS", getSensorPosition());
+        // SmartDashboard.putNumber(key, value)
     }
 
     public double getSensorVelocity() {
-        return mot_rightFrontDrive.getSelectedSensorVelocity();
+        return leftTalon.getSelectedSensorVelocity();
     }
 
     public double getSensorPosition() {
-        return mot_leftFrontDrive.getSelectedSensorPosition();
+        return leftTalon.getSelectedSensorPosition();
     }
 
     /**
@@ -281,14 +282,14 @@ public class DriveTrain extends SubsystemBase {
      * This method will put the robot in high gear
      */
     public void fastShift() {
-        ssl_gear.set(true);
+        // ssl_gear.set(true);
     }
 
     /**
      * This method will put the robot is low gear
      */
     public void slowShift() {
-        ssl_gear.set(false);
+        // ssl_gear.set(false);
     }
 
     /**
@@ -297,21 +298,21 @@ public class DriveTrain extends SubsystemBase {
      * @return The current wheel speeds.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(mot_leftFrontDrive.getSelectedSensorVelocity() * 10,
-                mot_rightFrontDrive.getSelectedSensorVelocity() * 10);
+        return new DifferentialDriveWheelSpeeds(leftTalon.getSelectedSensorVelocity() * 10,
+                rightTalon.getSelectedSensorVelocity() * 10);
     }
 
     /**
      * This method will reset the encoders
      */
-    public void resetEncoders() {
-        mot_leftFrontDrive.configFactoryDefault();
-        mot_rightFrontDrive.configFactoryDefault();
+    // public void resetEncoders() {
+    //     leftTalon.configFactoryDefault();
+    //     rightTalon.configFactoryDefault();
 
 
-    }
+    // }
 
-    public void resetOdometery() {
-        resetEncoders();
-    }
+    // public void resetOdometery() {
+    //     resetEncoders();
+    // }
 }

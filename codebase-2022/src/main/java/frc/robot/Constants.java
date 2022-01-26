@@ -25,11 +25,11 @@ public final class Constants {
         // public static final int CANRightDriveFront = 3;
         // public static final int CANRightDriveRear = 2;
 
-        public static final int CANRightDriveFront = 1;
-        public static final int CANRightDriveRear = 4;
+        public static final int CAN_RIGHT_TALON = 3;
+        public static final int CAN_RIGHT_NEO = 31;
 
-        public static final int CANLeftDriveFront = 3;
-        public static final int CANLeftDriveRear = 2;
+        public static final int CAN_LEFT_TALON = 4;
+        public static final int CAN_LEFT_NEO = 30;
 
         // Drive mode constants
         public static final int ARCADE_DRIVE = 1; // Arcade Drive

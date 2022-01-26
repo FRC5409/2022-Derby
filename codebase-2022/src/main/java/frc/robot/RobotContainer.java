@@ -31,7 +31,7 @@ public class RobotContainer {
   private final JoystickButton but_main_A, but_main_B, but_main_X, but_main_Y, but_main_LBumper, but_main_RBumper,
       but_main_LAnalog, but_main_RAnalog, but_main_Back, but_main_Start;
 
-  private final Pneumatics sys_Pneumatics;
+  // private final Pneumatics sys_Pneumatics;
   // Define drive train subsystem
   private final DriveTrain sys_DriveTrain;// = new DriveTrain();
 
@@ -60,7 +60,7 @@ public class RobotContainer {
     but_main_Start = new JoystickButton(m_joystick_main, XboxController.Button.kStart.value);
 
     // Init sub systems
-    sys_Pneumatics = new Pneumatics();
+    // sys_Pneumatics = new Pneumatics();
     
     sys_DriveTrain = new DriveTrain();
 
@@ -74,8 +74,8 @@ public class RobotContainer {
     System.out.println(RobotBase.isReal() ? "Entering controlled robot." : "Entering simulated environment.");
 
     // Configure sendable data
-    m_compressorFillOverride.setDefaultOption("Off", new SetManualCompressorFillOverride(sys_Pneumatics, false));
-    m_compressorFillOverride.addOption("On", new SetManualCompressorFillOverride(sys_Pneumatics, true));
+    // m_compressorFillOverride.setDefaultOption("Off", new SetManualCompressorFillOverride(sys_Pneumatics, false));
+    // m_compressorFillOverride.addOption("On", new SetManualCompressorFillOverride(sys_Pneumatics, true));
 
     SmartDashboard.putData(m_compressorFillOverride);
   }
@@ -96,9 +96,9 @@ public class RobotContainer {
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));
     // but_main_RBumper.whenPressed(() -> sys_DriveTrain.fastShift());
     // but_main_RBumper.whenReleased(() -> sys_DriveTrain.slowShift());
-    but_main_RBumper.whenHeld(new GearShift(sys_DriveTrain, sys_Pneumatics));
+    // but_main_RBumper.whenHeld(new GearShift(sys_DriveTrain, sys_Pneumatics));
 
-    but_main_Start.whenPressed(() -> sys_Pneumatics.toggle());
+    // but_main_Start.whenPressed(() -> sys_Pneumatics.toggle());
   }
 
   /**
