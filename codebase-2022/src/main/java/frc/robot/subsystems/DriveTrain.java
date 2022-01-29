@@ -29,17 +29,21 @@ public class DriveTrain extends SubsystemBase {
     private final WPI_TalonSRX left_BackTalon;
 
     private final DifferentialDrive m_drive;
-    private int m_driveMode = kDriveTrain.ARCADE_DRIVE;
+    private int m_driveMode = kDriveTrain.AADL_DRIVE;
 
     // private final Solenoid ssl_gear;
     private boolean m_allowShift = false;
     private long m_timeSinceShift = 0;
 
-    private final WPI_Pigeon2 gyro_pigeon;
-    private final DifferentialDriveOdometry dOdometry;
+    // private final WPI_Pigeon2 gyro_pigeon;
+    // private final DifferentialDriveOdometry dOdometry;
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
+        /**
+         * ------------------ RIGHT MOTOTRS ------------------
+         * Declerations: 
+         */
         right_FrontTalon = new WPI_TalonSRX(Constants.kDriveTrain.CAN_RIGHT_FRONT_TALON); // Has encoder
         right_FrontTalon.setInverted(false);
 
@@ -47,13 +51,17 @@ public class DriveTrain extends SubsystemBase {
         right_BackTalon.follow(right_FrontTalon);
         right_BackTalon.setInverted(InvertType.FollowMaster);
 
+        // Configurations: 
         right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
         right_FrontTalon.setNeutralMode(NeutralMode.Brake);
         right_BackTalon.setNeutralMode(NeutralMode.Brake);
 
-
+        /**
+         * ------------------ LEFT MOTOTRS ------------------
+         * Declerations: 
+         */
         left_FrontTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_FRONT_TALON);
         left_FrontTalon.setInverted(true);
 
@@ -61,6 +69,7 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.follow(left_FrontTalon);
         left_BackTalon.setInverted(InvertType.FollowMaster);
 
+        // Configurations:
         left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
@@ -69,14 +78,18 @@ public class DriveTrain extends SubsystemBase {
 
         // mot_rightFrontDrive.getStatorCurrent();
 
+        /**
+         * ------------------ DIFFERENTIAL DRIVE ------------------
+         * Decleration: 
+         */
         m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
 
         // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
         // SmartDashboard.putData(ssl_gear);
 
-        gyro_pigeon = new WPI_Pigeon2(Constants.kDriveTrain.CANPigeon);
-        dOdometry = new DifferentialDriveOdometry(gyro_pigeon.getRotation2d());
+        // gyro_pigeon = new WPI_Pigeon2(Constants.kDriveTrain.CANPigeon);
+        // dOdometry = new DifferentialDriveOdometry(gyro_pigeon.getRotation2d());
     }
 
     /**
@@ -286,25 +299,25 @@ public class DriveTrain extends SubsystemBase {
         // ssl_gear.set(false);
     }
 
-    /**
-     * Returns the current wheel speeds of the robot in m/s.
-     *
-     * @return The current wheel speeds.
-     */
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(left_FrontTalon.getSelectedSensorVelocity() * 10,
-                right_FrontTalon.getSelectedSensorVelocity() * 10);
-    }
+    // /**
+    //  * Returns the current wheel speeds of the robot in m/s.
+    //  *
+    //  * @return The current wheel speeds.
+    //  */
+    // public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    //     return new DifferentialDriveWheelSpeeds(left_FrontTalon.getSelectedSensorVelocity() * 10,
+    //             right_FrontTalon.getSelectedSensorVelocity() * 10);
+    // }
 
-    /**
-     * This method will reset the encoders
-     */
-    public void resetEncoders() {
-        left_FrontTalon.configFactoryDefault();
-        right_FrontTalon.configFactoryDefault();
-    }
+    // /**
+    //  * This method will reset the encoders
+    //  */
+    // public void resetEncoders() {
+    //     left_FrontTalon.configFactoryDefault();
+    //     right_FrontTalon.configFactoryDefault();
+    // }
 
-    public void resetOdometery() {
-        resetEncoders();
-    }
+    // public void resetOdometery() {
+    //     resetEncoders();
+    // }
 }

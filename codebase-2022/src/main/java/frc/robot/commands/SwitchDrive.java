@@ -56,7 +56,7 @@ public class SwitchDrive extends CommandBase {
 
     private void arcadeDriveExecute() {
         double acceleration = m_joystick.getLeftY() * -1;
-        double turn = m_joystick.getLeftX();
+        double turn = m_joystick.getLeftX() * -1;
 
         sys_drive.arcadeDrive(acceleration, turn);
     }
@@ -68,7 +68,7 @@ public class SwitchDrive extends CommandBase {
         double rightTrigger = m_joystick.getRightTriggerAxis();
         double leftTrigger = m_joystick.getLeftTriggerAxis();
 
-        double lAxis = m_joystick.getLeftX() * -1;
+        double lAxis = m_joystick.getLeftX();
 
         sys_drive.aadlDrive(rightTrigger, leftTrigger, lAxis);
     }
@@ -78,7 +78,7 @@ public class SwitchDrive extends CommandBase {
      */
     private void curvatureDriveExecute() {
         double speed = m_joystick.getLeftY() * -1;
-        double turn = m_joystick.getLeftX();
+        double turn = m_joystick.getLeftX() * -1;
 
         // true if the 'b' button on the controller is pressed
         boolean quickTurn = m_joystick.getBButton();
