@@ -16,8 +16,9 @@ public class SwitchDrive extends CommandBase {
 
     /**
      * Constructor for the SwitchDrive command
-     * @param sys_drive     DruveTrain subsystem
-     * @param joystick      Joystick
+     * 
+     * @param sys_drive DruveTrain subsystem
+     * @param joystick  Joystick
      */
     public SwitchDrive(DriveTrain sys_drive, XboxController joystick) {
         this.sys_drive = sys_drive;
@@ -26,13 +27,14 @@ public class SwitchDrive extends CommandBase {
         addRequirements(sys_drive);
     }
 
-    /** Called every time the scheduler runs while the command is scheduled.
-     *  Will call the drive mode based on the current drive mode. 
+    /**
+     * Called every time the scheduler runs while the command is scheduled.
+     * Will call the drive mode based on the current drive mode.
      */
     @Override
     public void execute() {
         switch (sys_drive.getDriveMode()) {
-            case kDriveTrain.ARCADE_DRIVE:  // 1
+            case kDriveTrain.ARCADE_DRIVE: // 1
                 arcadeDriveExecute();
                 break;
             case kDriveTrain.AADL_DRIVE: // 2
@@ -45,7 +47,7 @@ public class SwitchDrive extends CommandBase {
                 tankDriveExecute();
                 break;
             default:
-                arcadeDriveExecute();
+                sys_drive.aadlDrive(0, 0, 0);
                 break;
         }
 
@@ -76,7 +78,7 @@ public class SwitchDrive extends CommandBase {
      */
     private void curvatureDriveExecute() {
         double speed = m_joystick.getLeftY() * -1;
-        double turn = m_joystick.getLeftX() * -1;
+        double turn = m_joystick.getLeftX();
 
         // true if the 'b' button on the controller is pressed
         boolean quickTurn = m_joystick.getBButton();
@@ -91,6 +93,6 @@ public class SwitchDrive extends CommandBase {
         double leftSpeed = m_joystick.getLeftY() * -1;
         double rightSpeed = m_joystick.getRightY() * -1;
 
-        sys_drive.tankDrive((float)leftSpeed, (float)rightSpeed);
+        sys_drive.tankDrive((float) leftSpeed, (float) rightSpeed);
     }
 }
