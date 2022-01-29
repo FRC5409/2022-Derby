@@ -31,7 +31,7 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive m_drive;
     private int m_driveMode = kDriveTrain.AADL_DRIVE;
 
-    // private final Solenoid ssl_gear;
+    private final Solenoid ssl_gear;
     private boolean m_allowShift = false;
     private long m_timeSinceShift = 0;
 
@@ -84,9 +84,9 @@ public class DriveTrain extends SubsystemBase {
          */
         m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
 
-        // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
-        // SmartDashboard.putData(ssl_gear);
+        SmartDashboard.putData(ssl_gear);
 
         // gyro_pigeon = new WPI_Pigeon2(Constants.kDriveTrain.CANPigeon);
         // dOdometry = new DifferentialDriveOdometry(gyro_pigeon.getRotation2d());
@@ -289,14 +289,14 @@ public class DriveTrain extends SubsystemBase {
      * This method will put the robot in high gear
      */
     public void fastShift() {
-        // ssl_gear.set(true);
+        ssl_gear.set(true);
     }
 
     /**
      * This method will put the robot is low gear
      */
     public void slowShift() {
-        // ssl_gear.set(false);
+        ssl_gear.set(false);
     }
   
     // /**
