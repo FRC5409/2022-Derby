@@ -34,7 +34,7 @@ public final class Constants {
         public static final double UP_SHIFT = 300;
         public static final double DOWN_SHIFT = 260;
 
-        public static final int MOTOR_CURRENT_LIMIT = 80;
+        public static final int MOTOR_CURRENT_LIMIT = 60;
 
         // TODO: Run characterization to get proper gains
         public static final double ksVolts = 0.22;
