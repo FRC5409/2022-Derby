@@ -21,7 +21,6 @@ public final class Constants {
         // Motor CAN IDs
         public static final int CAN_RIGHT_FRONT_TALON = 1;
         public static final int CAN_RIGHT_BACK_TALON = 4;
-
         public static final int CAN_LEFT_FRONT_TALON = 2;
         public static final int CAN_LEFT_BACK_TALON = 3;
 

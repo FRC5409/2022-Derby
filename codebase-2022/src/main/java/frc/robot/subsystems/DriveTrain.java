@@ -113,7 +113,7 @@ public class DriveTrain extends SubsystemBase {
         // }
 
         displayDriveModeData();
-        // displayEncoderData();
+        displayEncoderData();
 
         SmartDashboard.putString("Drive Mode", getDriveModeName());
 
@@ -298,7 +298,7 @@ public class DriveTrain extends SubsystemBase {
     public void slowShift() {
         // ssl_gear.set(false);
     }
-
+  
     // /**
     //  * Returns the current wheel speeds of the robot in m/s.
     //  *
@@ -316,7 +316,7 @@ public class DriveTrain extends SubsystemBase {
     //     left_FrontTalon.configFactoryDefault();
     //     right_FrontTalon.configFactoryDefault();
     // }
-
+  
     // public void resetOdometery() {
     //     resetEncoders();
     // }
