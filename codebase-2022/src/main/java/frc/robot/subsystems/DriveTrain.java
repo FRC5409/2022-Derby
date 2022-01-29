@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.playingwithfusion.TimeOfFlight;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -30,6 +31,8 @@ public class DriveTrain extends SubsystemBase {
 
     private final DifferentialDrive m_drive;
     private int m_driveMode = kDriveTrain.AADL_DRIVE;
+
+    private final TimeOfFlight tof;
 
     // private final Solenoid ssl_gear;
     private boolean m_allowShift = false;
@@ -83,6 +86,14 @@ public class DriveTrain extends SubsystemBase {
          * Decleration: 
          */
         m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
+
+        /**
+         * ------------------ SENSORS ------------------
+         * Declerations: 
+         */
+
+         // Time of flight
+         tof = new TimeOfFlight(0);
 
         // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 

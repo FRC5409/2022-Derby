@@ -57,6 +57,9 @@ public final class Constants {
         public static final double RamseteB = 2;
         public static final double RamseteZeta = 0.7;
         public static final int CANPigeon = 0;
+
+        // The distance of the mid rung to the alliance wall in meters
+        public static final double DISTANCE_TO_MID_RUN_FROM_WALL = 2.2098;
     }
 
     public static class kPneumatics {
