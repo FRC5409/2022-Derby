@@ -4,16 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -26,10 +23,10 @@ import frc.robot.Constants.kDriveTrain;
  * DriveTrain subsystem
  */
 public class DriveTrain extends SubsystemBase {
-    private final WPI_TalonSRX leftTalon;
-    private final CANSparkMax leftNeo;
-    private final WPI_TalonSRX rightTalon;
-    private final CANSparkMax rightNeo;
+    private final WPI_TalonSRX right_FrontTalon;
+    private final WPI_TalonSRX right_BackTalon;
+    private final WPI_TalonSRX left_FrontTalon;
+    private final WPI_TalonSRX left_BackTalon;
 
     private final DifferentialDrive m_drive;
     private int m_driveMode = kDriveTrain.AADL_DRIVE;
@@ -43,33 +40,49 @@ public class DriveTrain extends SubsystemBase {
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
-        leftTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_TALON); // Has encoder
-        leftTalon.setInverted(false);
+        /**
+         * ------------------ RIGHT MOTOTRS ------------------
+         * Declerations: 
+         */
+        right_FrontTalon = new WPI_TalonSRX(Constants.kDriveTrain.CAN_RIGHT_FRONT_TALON); // Has encoder
+        right_FrontTalon.setInverted(false);
 
-        leftNeo = new CANSparkMax(kDriveTrain.CAN_LEFT_NEO, MotorType.kBrushless);
-        leftNeo.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CAN_LEFT_TALON, false);
+        right_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_RIGHT_BACK_TALON);
+        right_BackTalon.follow(right_FrontTalon);
+        right_BackTalon.setInverted(InvertType.FollowMaster);
 
-        rightTalon = new WPI_TalonSRX(kDriveTrain.CAN_RIGHT_TALON); // Has encoder
-        rightTalon.setInverted(true);
+        // Configurations: 
+        right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
-        rightNeo = new CANSparkMax(kDriveTrain.CAN_RIGHT_NEO, MotorType.kBrushless);
-        rightNeo.follow(CANSparkMax.ExternalFollower.kFollowerPhoenix, kDriveTrain.CAN_RIGHT_TALON, true);
+        right_FrontTalon.setNeutralMode(NeutralMode.Brake);
+        right_BackTalon.setNeutralMode(NeutralMode.Brake);
 
-        leftTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        leftNeo.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        rightTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        rightNeo.setSmartCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        /**
+         * ------------------ LEFT MOTOTRS ------------------
+         * Declerations: 
+         */
+        left_FrontTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_FRONT_TALON);
+        left_FrontTalon.setInverted(true);
 
-        leftTalon.setNeutralMode(NeutralMode.Coast);
-        leftNeo.setIdleMode(IdleMode.kCoast);
-        rightTalon.setNeutralMode(NeutralMode.Coast);
-        rightNeo.setIdleMode(IdleMode.kCoast);
+        left_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_BACK_TALON); // Back left talon (follower, has encoder)
+        left_BackTalon.follow(left_FrontTalon);
+        left_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // mot_leftFrontDrive.configPul
+        // Configurations:
+        left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+
+        left_FrontTalon.setNeutralMode(NeutralMode.Brake);
+        left_BackTalon.setNeutralMode(NeutralMode.Brake);
 
         // mot_rightFrontDrive.getStatorCurrent();
 
-        m_drive = new DifferentialDrive(leftTalon, rightTalon);
+        /**
+         * ------------------ DIFFERENTIAL DRIVE ------------------
+         * Decleration: 
+         */
+        m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
 
         // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
@@ -213,17 +226,11 @@ public class DriveTrain extends SubsystemBase {
      * This method will display encoder data.
      */
     public void displayEncoderData() {
-        // SmartDashboard.putNumber("MOT_FL_VEL", getSensorVelocity());
-        // SmartDashboard.putNumber("MOT_FL_POS", getSensorPosition());
-        // SmartDashboard.putNumber(key, value)
-    }
+        SmartDashboard.putNumber("MOT_RB_VEL", right_BackTalon.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("MOT_RB_POS", right_BackTalon.getSelectedSensorPosition());
 
-    public double getSensorVelocity() {
-        return leftTalon.getSelectedSensorVelocity();
-    }
-
-    public double getSensorPosition() {
-        return leftTalon.getSelectedSensorPosition();
+        SmartDashboard.putNumber("MOT_LB_VEL", left_BackTalon.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("MOT_LB_POS", left_BackTalon.getSelectedSensorPosition());
     }
 
     /**
@@ -291,27 +298,25 @@ public class DriveTrain extends SubsystemBase {
     public void slowShift() {
         // ssl_gear.set(false);
     }
-
-    /**
-     * Returns the current wheel speeds of the robot in m/s.
-     *
-     * @return The current wheel speeds.
-     */
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(leftTalon.getSelectedSensorVelocity() * 10,
-                rightTalon.getSelectedSensorVelocity() * 10);
-    }
-
-    /**
-     * This method will reset the encoders
-     */
-    // public void resetEncoders() {
-    //     leftTalon.configFactoryDefault();
-    //     rightTalon.configFactoryDefault();
-
-
+  
+    // /**
+    //  * Returns the current wheel speeds of the robot in m/s.
+    //  *
+    //  * @return The current wheel speeds.
+    //  */
+    // public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    //     return new DifferentialDriveWheelSpeeds(left_FrontTalon.getSelectedSensorVelocity() * 10,
+    //             right_FrontTalon.getSelectedSensorVelocity() * 10);
     // }
 
+    // /**
+    //  * This method will reset the encoders
+    //  */
+    // public void resetEncoders() {
+    //     left_FrontTalon.configFactoryDefault();
+    //     right_FrontTalon.configFactoryDefault();
+    // }
+  
     // public void resetOdometery() {
     //     resetEncoders();
     // }
