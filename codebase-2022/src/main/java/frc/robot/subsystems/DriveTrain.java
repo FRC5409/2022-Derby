@@ -254,7 +254,7 @@ public class DriveTrain extends SubsystemBase {
     public void aadlDrive(final double acceleration, final double deceleration, final double turn) {
         double accelrate = acceleration - deceleration;
 
-        m_drive.arcadeDrive(accelrate, turn, true);
+        m_drive.arcadeDrive(accelrate, turn);
         SmartDashboard.putNumber("ADT_Acceleration", accelrate);
     }
 

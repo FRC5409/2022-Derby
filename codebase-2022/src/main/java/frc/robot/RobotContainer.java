@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CycleDriveMode;
 import frc.robot.commands.GearShift;
 import frc.robot.commands.SetManualCompressorFillOverride;
 import frc.robot.commands.SimpleDriveAuto;
@@ -88,10 +89,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Bind left analog to switch to previous drive mode
-    but_main_LAnalog.whenPressed(() -> sys_DriveTrain.previousDriveMode());
+    but_main_LAnalog.whenPressed(new CycleDriveMode(sys_DriveTrain, false));
 
     // Bind right analog to switch to next drive mode
-    but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
+    but_main_RAnalog.whenPressed(new CycleDriveMode(sys_DriveTrain, true));
 
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));
     // but_main_RBumper.whenPres ed(() -> sys_DriveTrain.slowShift());

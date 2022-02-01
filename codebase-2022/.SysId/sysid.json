@@ -1,8 +1,11 @@
 {
   "SysId": {
     "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\mimo2\\OneDrive\\Desktop\\2022-Derby\\codebase-2022\\.SysId\\sysid_data20220129-131256.json",
     "NetworkTables Settings": {
       "serverTeam": "5409"
-    }
+    },
+    "mode": "Client",
+    "serverTeam": "5409"
   }
 }
