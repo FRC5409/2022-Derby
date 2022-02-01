@@ -52,6 +52,9 @@ public class DriveTrain extends SubsystemBase {
         right_BackTalon.setInverted(InvertType.FollowMaster);
 
         // Configurations: 
+        right_BackTalon.configFactoryDefault();
+        right_FrontTalon.configFactoryDefault();
+
         right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
@@ -70,6 +73,9 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.setInverted(InvertType.FollowMaster);
 
         // Configurations:
+        left_FrontTalon.configFactoryDefault();
+        left_BackTalon.configFactoryDefault();
+
         left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
@@ -254,7 +260,7 @@ public class DriveTrain extends SubsystemBase {
     public void aadlDrive(final double acceleration, final double deceleration, final double turn) {
         double accelrate = acceleration - deceleration;
 
-        m_drive.arcadeDrive(accelrate, turn);
+        m_drive.arcadeDrive(accelrate, turn, true);
         SmartDashboard.putNumber("ADT_Acceleration", accelrate);
     }
 

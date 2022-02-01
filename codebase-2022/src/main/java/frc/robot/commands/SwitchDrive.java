@@ -95,4 +95,10 @@ public class SwitchDrive extends CommandBase {
 
         sys_drive.tankDrive((float) leftSpeed, (float) rightSpeed);
     }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
