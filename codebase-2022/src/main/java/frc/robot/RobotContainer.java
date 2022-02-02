@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.GearShift;
 import frc.robot.commands.SetManualCompressorFillOverride;
 import frc.robot.commands.SimpleDriveAuto;
 import frc.robot.commands.SwitchDrive;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Pneumatics;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -34,6 +36,7 @@ public class RobotContainer {
   // private final Pneumatics sys_Pneumatics;
   // Define drive train subsystem
   private final DriveTrain sys_DriveTrain;// = new DriveTrain();
+  private final Pigeon sys_Pigeon;
 
   // Define default command
   private final SwitchDrive cmd_defaultDrive;
@@ -63,6 +66,7 @@ public class RobotContainer {
     // sys_Pneumatics = new Pneumatics();
     
     sys_DriveTrain = new DriveTrain();
+    sys_Pigeon = new Pigeon();
 
     // Init commands
     cmd_defaultDrive = new SwitchDrive(sys_DriveTrain, m_joystick_main);
@@ -93,6 +97,7 @@ public class RobotContainer {
     // Bind right analog to switch to next drive mode
     but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
 
+    but_main_X.whenPressed(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0));
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));
     // but_main_RBumper.whenPressed(() -> sys_DriveTrain.fastShift());
     // but_main_RBumper.whenReleased(() -> sys_DriveTrain.slowShift());

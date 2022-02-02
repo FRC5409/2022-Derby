@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -45,7 +46,7 @@ public class DriveTrain extends SubsystemBase {
     public DriveTrain() {
         /**
          * ------------------ RIGHT MOTOTRS ------------------
-         * Declerations: 
+         * Declerations:
          */
         right_FrontTalon = new WPI_TalonSRX(Constants.kDriveTrain.CAN_RIGHT_FRONT_TALON); // Has encoder
         right_FrontTalon.setInverted(false);
@@ -54,7 +55,10 @@ public class DriveTrain extends SubsystemBase {
         right_BackTalon.follow(right_FrontTalon);
         right_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // Configurations: 
+        // Configurations:
+        right_FrontTalon.configFactoryDefault();
+        right_BackTalon.configFactoryDefault();
+
         right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
@@ -63,7 +67,7 @@ public class DriveTrain extends SubsystemBase {
 
         /**
          * ------------------ LEFT MOTOTRS ------------------
-         * Declerations: 
+         * Declerations:
          */
         left_FrontTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_FRONT_TALON);
         left_FrontTalon.setInverted(true);
@@ -73,6 +77,9 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.setInverted(InvertType.FollowMaster);
 
         // Configurations:
+        left_FrontTalon.configFactoryDefault();
+        left_BackTalon.configFactoryDefault();
+
         left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
         left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
@@ -83,17 +90,18 @@ public class DriveTrain extends SubsystemBase {
 
         /**
          * ------------------ DIFFERENTIAL DRIVE ------------------
-         * Decleration: 
+         * Decleration:
          */
         m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
 
         /**
          * ------------------ SENSORS ------------------
-         * Declerations: 
+         * Declerations:
          */
 
-         // Time of flight
-         tof = new TimeOfFlight(0);
+        // Time of flight
+        tof = new TimeOfFlight(Constants.kDriveTrain.CAN_TOF_SENSOR);
+        tof.setRangingMode(RangingMode.Long, 1000);
 
         // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
@@ -126,10 +134,14 @@ public class DriveTrain extends SubsystemBase {
         displayDriveModeData();
         displayEncoderData();
 
+        SmartDashboard.putNumber("Distance", getDistance());
+        SmartDashboard.putBoolean("Distance Valid", getValidDistance());
+
         SmartDashboard.putString("Drive Mode", getDriveModeName());
 
-        // dOdometry.update(gyro_pigeon.getRotation2d(), mot_leftFrontDrive.getSelectedSensorPosition(),
-        //         mot_rightFrontDrive.getSelectedSensorPosition());
+        // dOdometry.update(gyro_pigeon.getRotation2d(),
+        // mot_leftFrontDrive.getSelectedSensorPosition(),
+        // mot_rightFrontDrive.getSelectedSensorPosition());
     }
 
     @Override
@@ -309,26 +321,36 @@ public class DriveTrain extends SubsystemBase {
     public void slowShift() {
         // ssl_gear.set(false);
     }
-  
+
+    public double getDistance() {
+        return tof.getRange() / 1000;
+    }
+
+    public boolean getValidDistance() {
+        return tof.isRangeValid();
+    }
+
     // /**
-    //  * Returns the current wheel speeds of the robot in m/s.
-    //  *
-    //  * @return The current wheel speeds.
-    //  */
+    // * Returns the current wheel speeds of the robot in m/s.
+    // *
+    // * @return The current wheel speeds.
+    // */
     // public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    //     return new DifferentialDriveWheelSpeeds(left_FrontTalon.getSelectedSensorVelocity() * 10,
-    //             right_FrontTalon.getSelectedSensorVelocity() * 10);
+    // return new
+    // DifferentialDriveWheelSpeeds(left_FrontTalon.getSelectedSensorVelocity() *
+    // 10,
+    // right_FrontTalon.getSelectedSensorVelocity() * 10);
     // }
 
     // /**
-    //  * This method will reset the encoders
-    //  */
+    // * This method will reset the encoders
+    // */
     // public void resetEncoders() {
-    //     left_FrontTalon.configFactoryDefault();
-    //     right_FrontTalon.configFactoryDefault();
+    // left_FrontTalon.configFactoryDefault();
+    // right_FrontTalon.configFactoryDefault();
     // }
-  
+
     // public void resetOdometery() {
-    //     resetEncoders();
+    // resetEncoders();
     // }
 }

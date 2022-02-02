@@ -6,22 +6,27 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Pigeon;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** A simple drive straight command that can be used by the DriveTrain */
-public class DriveToMidRung extends CommandBase {
+public class TurnToAngle extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain sys_drive;
+  private final Pigeon sys_pigeon;
+  private final double angle;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveToMidRung(DriveTrain driveTrain) {
+  public TurnToAngle(DriveTrain driveTrain, Pigeon pigeon, double toAngle) {
     sys_drive = driveTrain;
+    sys_pigeon = pigeon;
+    angle = toAngle;
 
-    addRequirements(sys_drive);
+    addRequirements(sys_drive, sys_pigeon);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +36,7 @@ public class DriveToMidRung extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sys_drive.tankDrive(0.5f, 0.5f);
+    sys_drive.tankDrive(-0.5f, 0.5f);
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +48,6 @@ public class DriveToMidRung extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return sys_drive.getDistance() <= Constants.kDriveTrain.DISTANCE_TO_MID_RUN_FROM_WALL && sys_drive.getValidDistance();
+    return Math.abs(angle - (sys_pigeon.getAngle() % 360)) <= 2;
   }
 }
