@@ -43,6 +43,6 @@ public class DriveToMidRung extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return sys_drive.getDistance() <= Constants.kDriveTrain.DISTANCE_TO_MID_RUN_FROM_WALL && sys_drive.getValidDistance();
+    return sys_drive.getDistance() <= Constants.kDriveTrain.DISTANCE_TO_MID_RUN_FROM_WALL && sys_drive.getValidDistance() && sys_drive.getDistance() <= 1.3;
   }
 }

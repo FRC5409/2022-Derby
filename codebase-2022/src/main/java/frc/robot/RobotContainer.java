@@ -110,6 +110,8 @@ public class RobotContainer {
     but_main_X.whenPressed(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0).andThen(new StartClimb(sys_DriveTrain)));
 
     but_main_Y.whenPressed(new MoveToPosition(sys_DriveTrain, 1));
+
+    but_main_B.whenPressed(() -> sys_Pigeon.reset(0));
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));
     // but_main_RBumper.whenPressed(() -> sys_DriveTrain.fastShift());
     // but_main_RBumper.whenReleased(() -> sys_DriveTrain.slowShift());
