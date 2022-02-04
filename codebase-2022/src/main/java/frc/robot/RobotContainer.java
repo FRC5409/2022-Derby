@@ -4,15 +4,21 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.GearShift;
+import frc.robot.commands.MoveToPosition;
 import frc.robot.commands.SetManualCompressorFillOverride;
 import frc.robot.commands.SimpleDriveAuto;
+import frc.robot.commands.StartClimb;
 import frc.robot.commands.SwitchDrive;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Pigeon;
@@ -42,7 +48,7 @@ public class RobotContainer {
   private final SwitchDrive cmd_defaultDrive;
 
   private SendableChooser<Command> m_compressorFillOverride = new SendableChooser<>();
-  
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -64,7 +70,7 @@ public class RobotContainer {
 
     // Init sub systems
     // sys_Pneumatics = new Pneumatics();
-    
+
     sys_DriveTrain = new DriveTrain();
     sys_Pigeon = new Pigeon();
 
@@ -78,11 +84,15 @@ public class RobotContainer {
     System.out.println(RobotBase.isReal() ? "Entering controlled robot." : "Entering simulated environment.");
 
     // Configure sendable data
-    // m_compressorFillOverride.setDefaultOption("Off", new SetManualCompressorFillOverride(sys_Pneumatics, false));
-    // m_compressorFillOverride.addOption("On", new SetManualCompressorFillOverride(sys_Pneumatics, true));
+    // m_compressorFillOverride.setDefaultOption("Off", new
+    // SetManualCompressorFillOverride(sys_Pneumatics, false));
+    // m_compressorFillOverride.addOption("On", new
+    // SetManualCompressorFillOverride(sys_Pneumatics, true));
+
 
     SmartDashboard.putData(m_compressorFillOverride);
   }
+  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -97,7 +107,9 @@ public class RobotContainer {
     // Bind right analog to switch to next drive mode
     but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
 
-    but_main_X.whenPressed(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0));
+    but_main_X.whenPressed(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0).andThen(new StartClimb(sys_DriveTrain)));
+
+    but_main_Y.whenPressed(new MoveToPosition(sys_DriveTrain, 1));
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));
     // but_main_RBumper.whenPressed(() -> sys_DriveTrain.fastShift());
     // but_main_RBumper.whenReleased(() -> sys_DriveTrain.slowShift());

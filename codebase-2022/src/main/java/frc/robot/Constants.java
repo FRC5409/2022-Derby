@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import frc.robot.util.Gains;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -17,11 +18,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static class kDriveTrain {   
+    public static class kDriveTrain {
         // Motor CAN IDs
         public static final int CAN_RIGHT_FRONT_TALON = 2;
         public static final int CAN_RIGHT_BACK_TALON = 4;
-        
+
         public static final int CAN_LEFT_FRONT_TALON = 1;
         public static final int CAN_LEFT_BACK_TALON = 3;
 
@@ -39,9 +40,13 @@ public final class Constants {
         public static final int MOTOR_CURRENT_LIMIT = 80;
 
         // TODO: Run characterization to get proper gains
-        public static final double ksVolts = 0.22;
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        public static final double ksVolts = 0.97915;
+        public static final double kvVoltSecondsPerMeter = 5.1975;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.48974;
+
+        public static final double kP = 7.5;
+        public static final double kI = 0.0;
+        public static final double kD = 80 * kP;
 
         // Example value only - as above, this must be tuned for your drive!
         public static final double PDriveVel = 8.5;
@@ -62,6 +67,11 @@ public final class Constants {
 
         // The distance of the mid rung to the alliance wall in meters
         public static final double DISTANCE_TO_MID_RUN_FROM_WALL = 2.2098;
+        public static final int kPIDLoopIdx = 0;
+        public static final int kTimeoutMs = 0;
+
+        public static final Gains kDistanceGains = new Gains(kP, kI, kD, 0, 0, 1);
+        public static final double METERS_TO_RSU = 12_832.0802;
     }
 
     public static class kPneumatics {
@@ -72,4 +82,6 @@ public final class Constants {
     public static class kGyroSystem {
         public static final int CANPigeon = 6;
     }
+
+    
 }
