@@ -24,6 +24,8 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Pneumatics;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -107,9 +109,13 @@ public class RobotContainer {
     // Bind right analog to switch to next drive mode
     but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
 
-    but_main_X.whenPressed(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0).andThen(new StartClimb(sys_DriveTrain)));
+    but_main_X.whenPressed(() -> {
+      CommandScheduler.getInstance().schedule(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0));
+    });
 
-    but_main_Y.whenPressed(new MoveToPosition(sys_DriveTrain, 1));
+    but_main_Y.whenPressed(() -> {
+      CommandScheduler.getInstance().schedule(new MoveToPosition(sys_DriveTrain, 1));
+    });
 
     but_main_B.whenPressed(() -> sys_Pigeon.reset(0));
     // but_main_Y.whenHeld(new GearShift(sys_DriveTrain));

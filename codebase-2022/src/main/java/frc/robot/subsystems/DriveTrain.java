@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -16,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
+import com.playingwithfusion.TimeOfFlight.Status;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -55,6 +57,8 @@ public class DriveTrain extends SubsystemBase {
 
     private NetworkTableEntry dSlider;
 
+    public ArrayList<Double> measuredDistances = new ArrayList<>();
+
     // private final WPI_Pigeon2 gyro_pigeon;
     // private final DifferentialDriveOdometry dOdometry;
 
@@ -71,38 +75,6 @@ public class DriveTrain extends SubsystemBase {
         right_BackTalon.follow(right_FrontTalon);
         right_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // Configurations:
-        right_FrontTalon.configFactoryDefault();
-        right_BackTalon.configFactoryDefault();
-
-        right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-
-        right_FrontTalon.setNeutralMode(NeutralMode.Brake);
-        right_BackTalon.setNeutralMode(NeutralMode.Brake);
-
-        right_FrontTalon.configNominalOutputForward(0, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.configNominalOutputReverse(0, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.configPeakOutputForward(1, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.configPeakOutputReverse(-1, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.configAllowableClosedloopError(0, kDriveTrain.kPIDLoopIdx, kDriveTrain.kTimeoutMs);
-
-        right_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kP, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kI, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kD, kDriveTrain.kTimeoutMs);
-
-        right_BackTalon.configNominalOutputForward(0, kDriveTrain.kTimeoutMs);
-        right_BackTalon.configNominalOutputReverse(0, kDriveTrain.kTimeoutMs);
-        right_BackTalon.configPeakOutputForward(1, kDriveTrain.kTimeoutMs);
-        right_BackTalon.configPeakOutputReverse(-1, kDriveTrain.kTimeoutMs);
-        right_BackTalon.configAllowableClosedloopError(0, kDriveTrain.kPIDLoopIdx, kDriveTrain.kTimeoutMs);
-
-        right_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kP, kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kI, kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kD, kDriveTrain.kTimeoutMs);
-
         /**
          * ------------------ LEFT MOTOTRS ------------------
          * Declerations:
@@ -114,39 +86,10 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.follow(left_FrontTalon);
         left_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // Configurations:
-        left_FrontTalon.configFactoryDefault();
-        left_BackTalon.configFactoryDefault();
-
-        left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-
-        left_FrontTalon.setNeutralMode(NeutralMode.Brake);
-        left_BackTalon.setNeutralMode(NeutralMode.Brake);
-
-        left_FrontTalon.configNominalOutputForward(0, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.configNominalOutputReverse(0, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.configPeakOutputForward(1, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.configPeakOutputReverse(-1, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.configAllowableClosedloopError(0, kDriveTrain.kPIDLoopIdx, kDriveTrain.kTimeoutMs);
-
-        left_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kP, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kI, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kD, kDriveTrain.kTimeoutMs);
-
-        left_BackTalon.configNominalOutputForward(0, kDriveTrain.kTimeoutMs);
-        left_BackTalon.configNominalOutputReverse(0, kDriveTrain.kTimeoutMs);
-        left_BackTalon.configPeakOutputForward(1, kDriveTrain.kTimeoutMs);
-        left_BackTalon.configPeakOutputReverse(-1, kDriveTrain.kTimeoutMs);
-        left_BackTalon.configAllowableClosedloopError(0, kDriveTrain.kPIDLoopIdx, kDriveTrain.kTimeoutMs);
-
-        left_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kP, kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kI, kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kD, kDriveTrain.kTimeoutMs);
-
         // mot_rightFrontDrive.getStatorCurrent();
+        confgiMotors();
+
+        zeroEncoders();
 
         /**
          * ------------------ DIFFERENTIAL DRIVE ------------------
@@ -162,6 +105,8 @@ public class DriveTrain extends SubsystemBase {
         // Time of flight
         tof = new TimeOfFlight(Constants.kDriveTrain.CAN_TOF_SENSOR);
         tof.setRangingMode(RangingMode.Medium, 1000);
+
+        // tof.setRangeOfInterest(9, 9, 11, 11);
 
         // ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
@@ -182,7 +127,7 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Mode", right_FrontTalon.getControlMode().value);
     }
 
-    public void resetMotorConfigs() {
+    public void confgiMotors() {
         right_FrontTalon.configFactoryDefault();
         right_BackTalon.configFactoryDefault();
 
@@ -271,6 +216,7 @@ public class DriveTrain extends SubsystemBase {
 
         SmartDashboard.putNumber("Distance", getDistance());
         SmartDashboard.putBoolean("Distance Valid", getValidDistance());
+        SmartDashboard.putNumber("Ambient Light Level", tof.getAmbientLightLevel());
 
         SmartDashboard.putString("Drive Mode", getDriveModeName());
 
@@ -281,6 +227,8 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("P", pSlider.getDouble(Constants.kDriveTrain.kP));
         SmartDashboard.putNumber("I", iSlider.getDouble(Constants.kDriveTrain.kI));
         SmartDashboard.putNumber("D", dSlider.getDouble(Constants.kDriveTrain.kD));
+
+        SmartDashboard.putBoolean("AVG CALLED", false);
     }
 
     @Override
@@ -467,10 +415,21 @@ public class DriveTrain extends SubsystemBase {
         // ssl_gear.set(false);
     }
 
+    /**
+     * This method will return the distance read by the Time of Flight sensor.
+     * 
+     * @return distance in meters
+     */
     public double getDistance() {
         return tof.getRange() / 1000;
     }
 
+    /**
+     * This method will return if the distance read from the Time Of Flight sensor
+     * is accurate.
+     * 
+     * @return valid or invalid.
+     */
     public boolean getValidDistance() {
         return tof.isRangeValid();
     }
@@ -482,11 +441,15 @@ public class DriveTrain extends SubsystemBase {
         left_FrontTalon.setSelectedSensorPosition(0);
         left_BackTalon.setSelectedSensorPosition(0);
 
-        right_FrontTalon.setSelectedSensorPosition(0, Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
-        right_BackTalon.setSelectedSensorPosition(0, Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
+        // right_FrontTalon.setSelectedSensorPosition(0,
+        // Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
+        // right_BackTalon.setSelectedSensorPosition(0,
+        // Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
 
-        left_FrontTalon.setSelectedSensorPosition(0, Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
-        left_BackTalon.setSelectedSensorPosition(0, Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
+        // left_FrontTalon.setSelectedSensorPosition(0,
+        // Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
+        // left_BackTalon.setSelectedSensorPosition(0,
+        // Constants.kDriveTrain.kPIDLoopIdx, Constants.kDriveTrain.kTimeoutMs);
     }
 
     public void setDefaultControlMode() {
@@ -498,7 +461,7 @@ public class DriveTrain extends SubsystemBase {
 
         left_FrontTalon.set(TalonSRXControlMode.PercentOutput, 0);
         left_FrontTalon.setInverted(true);
-        
+
         left_BackTalon.follow(left_FrontTalon);
         left_BackTalon.setInverted(InvertType.FollowMaster);
     }
@@ -510,41 +473,60 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.set(mode, setpoint);
         left_FrontTalon.set(mode, setpoint);
 
-        right_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx, pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-                kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx, iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-                kDriveTrain.kTimeoutMs);
-        right_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx, dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-                kDriveTrain.kTimeoutMs);
+        // right_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        // right_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+        // kDriveTrain.kTimeoutMs);
+        // right_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+        // kDriveTrain.kTimeoutMs);
+        // right_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+        // kDriveTrain.kTimeoutMs);
 
-        right_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx, pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-                kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx, iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-                kDriveTrain.kTimeoutMs);
-        right_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx, dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-                kDriveTrain.kTimeoutMs);
+        // right_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        // right_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+        // kDriveTrain.kTimeoutMs);
+        // right_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+        // kDriveTrain.kTimeoutMs);
+        // right_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+        // kDriveTrain.kTimeoutMs);
 
-        left_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx, pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-                kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx, iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-                kDriveTrain.kTimeoutMs);
-        left_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx, dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-                kDriveTrain.kTimeoutMs);
+        // left_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        // left_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+        // kDriveTrain.kTimeoutMs);
+        // left_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+        // kDriveTrain.kTimeoutMs);
+        // left_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+        // kDriveTrain.kTimeoutMs);
 
-        left_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx, kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx, pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-                kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx, iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-                kDriveTrain.kTimeoutMs);
-        left_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx, dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-                kDriveTrain.kTimeoutMs);
+        // left_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        // left_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+        // kDriveTrain.kTimeoutMs);
+        // left_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+        // kDriveTrain.kTimeoutMs);
+        // left_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+        // kDriveTrain.kTimeoutMs);
 
-        System.out.println("P: " + pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP));
-        System.out.println("I: " + iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI));
-        System.out.println("D: " + dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD));
+        // System.out.println("P: " +
+        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP));
+        // System.out.println("I: " +
+        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI));
+        // System.out.println("D: " +
+        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD));
 
     }
 
@@ -572,6 +554,38 @@ public class DriveTrain extends SubsystemBase {
         return (right_BackTalon.getSelectedSensorPosition());
     }
 
+    public double getAvgDistance() {
+        System.out.print("DATA: ");
+        System.out.println(measuredDistances.toString());
+        double sum = 0.0;
+
+        double[] arr = new double[measuredDistances.size()];
+
+        for (int i = 0; i < measuredDistances.size(); i++) {
+            sum += measuredDistances.get(i);
+
+            arr[i] = measuredDistances.get(i);
+        }
+
+        double avg = sum / measuredDistances.size();
+
+        SmartDashboard.putNumberArray("Distances", arr);
+        SmartDashboard.putNumber("Avergae Distance", avg);
+        SmartDashboard.putBoolean("AVG CALLED", true);
+        return avg;
+    }
+
+    public void addDistance(double val) {
+        measuredDistances.add(val);
+    }
+
+    public void clearDistances() {
+        measuredDistances.clear();
+    }
+
+    public int getNumOfDistances() {
+        return measuredDistances.size();
+    }
     // /**
     // * Returns the current wheel speeds of the robot in m/s.
     // *
@@ -583,6 +597,26 @@ public class DriveTrain extends SubsystemBase {
     // 10,
     // right_FrontTalon.getSelectedSensorVelocity() * 10);
     // }
+
+    public double getEncoderVelocity() {
+        return (getEncoderVelocityLeft() + getEncoderVelocityRight()) / 2;
+    }
+
+    /**
+     * @return the average position of the left encoders
+     * 
+     */
+    public double getEncoderVelocityLeft() {
+        return (left_BackTalon.getSelectedSensorVelocity());
+    }
+
+    /**
+     * @return the average position of the left encoders
+     * 
+     */
+    public double getEncoderVelocityRight() {
+        return (right_BackTalon.getSelectedSensorVelocity());
+    }
 
     // /**
     // * This method will reset the encoders

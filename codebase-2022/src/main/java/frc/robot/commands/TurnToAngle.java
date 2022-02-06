@@ -11,10 +11,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** A simple drive straight command that can be used by the DriveTrain */
 public class TurnToAngle extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DriveTrain sys_drive;
   private final Pigeon sys_pigeon;
   private final double angle;
+  private double startAngle;
 
   /**
    * Creates a new ExampleCommand.
@@ -31,12 +32,24 @@ public class TurnToAngle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Turning to angle");
+    startAngle = sys_pigeon.getAngle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    sys_drive.tankDrive(-0.5f, 0.5f);
+    double left = -(1 * Math.abs((angle - (sys_pigeon.getAngle() % 360)) / startAngle));
+    double right = (1 * Math.abs((angle - (sys_pigeon.getAngle() % 360)) / startAngle));
+
+    if (Math.abs(left) < 0.5)
+      left = -0.5;
+
+    if (Math.abs(right) < 0.5)
+      right = 0.5;
+
+    sys_drive.tankDrive((float) left, (float) right);
   }
 
   // Called once the command ends or is interrupted.
@@ -49,5 +62,6 @@ public class TurnToAngle extends CommandBase {
   @Override
   public boolean isFinished() {
     return Math.abs(angle - (sys_pigeon.getAngle() % 360)) <= 2;
+    // return true;
   }
 }
