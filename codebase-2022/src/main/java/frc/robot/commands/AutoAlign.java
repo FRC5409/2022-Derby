@@ -9,7 +9,7 @@ public class AutoAlign extends SequentialCommandGroup {
     public AutoAlign(DriveTrain driveTrain, Pigeon pigeon, double toAngle) {
         super();
 
-        addRequirements(driveTrain, pigeon);
+        // addRequirements(driveTrain, pigeon);
 
         addCommands(
                 new TurnToAngle(driveTrain, pigeon, toAngle),

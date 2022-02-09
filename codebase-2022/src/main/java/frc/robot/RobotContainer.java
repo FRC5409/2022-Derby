@@ -91,10 +91,8 @@ public class RobotContainer {
     // m_compressorFillOverride.addOption("On", new
     // SetManualCompressorFillOverride(sys_Pneumatics, true));
 
-
     SmartDashboard.putData(m_compressorFillOverride);
   }
-  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -110,7 +108,8 @@ public class RobotContainer {
     but_main_RAnalog.whenPressed(() -> sys_DriveTrain.nextDriveMode());
 
     but_main_X.whenPressed(() -> {
-      CommandScheduler.getInstance().schedule(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0));
+      CommandScheduler.getInstance()
+          .schedule(new AutoAlign(sys_DriveTrain, sys_Pigeon, 0));
     });
 
     but_main_Y.whenPressed(() -> {

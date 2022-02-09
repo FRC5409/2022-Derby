@@ -44,9 +44,11 @@ public final class Constants {
         public static final double kvVoltSecondsPerMeter = 5.1975;
         public static final double kaVoltSecondsSquaredPerMeter = 0.48974;
 
-        public static final double kP = 6.5;
-        public static final double kI = 0.0;
-        public static final double kD = 10 * kP;
+        public static final double kP = 9.5;
+        public static final double kI = 1.0;
+        // public static final double kD = 10 * kP;
+        public static final double kD = 65;
+
 
         // Example value only - as above, this must be tuned for your drive!
         public static final double PDriveVel = 8.5;

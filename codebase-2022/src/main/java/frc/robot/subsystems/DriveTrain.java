@@ -473,61 +473,60 @@ public class DriveTrain extends SubsystemBase {
         left_BackTalon.set(mode, setpoint);
         left_FrontTalon.set(mode, setpoint);
 
-        // right_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
-        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        // right_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
-        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-        // kDriveTrain.kTimeoutMs);
-        // right_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
-        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-        // kDriveTrain.kTimeoutMs);
-        // right_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
-        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-        // kDriveTrain.kTimeoutMs);
+        right_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+                kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        right_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+                pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+                kDriveTrain.kTimeoutMs);
+        right_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+                iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+                kDriveTrain.kTimeoutMs);
+        right_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+                dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+                kDriveTrain.kTimeoutMs);
 
-        // right_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
-        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        // right_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
-        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-        // kDriveTrain.kTimeoutMs);
-        // right_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
-        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-        // kDriveTrain.kTimeoutMs);
-        // right_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
-        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-        // kDriveTrain.kTimeoutMs);
+        right_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+                kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        right_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+                pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+                kDriveTrain.kTimeoutMs);
+        right_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+                iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+                kDriveTrain.kTimeoutMs);
+        right_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+                dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+                kDriveTrain.kTimeoutMs);
 
-        // left_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
-        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        // left_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
-        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-        // kDriveTrain.kTimeoutMs);
-        // left_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
-        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-        // kDriveTrain.kTimeoutMs);
-        // left_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
-        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-        // kDriveTrain.kTimeoutMs);
+        left_FrontTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+                kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        left_FrontTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+                pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+                kDriveTrain.kTimeoutMs);
+        left_FrontTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+                iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+                kDriveTrain.kTimeoutMs);
+        left_FrontTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+                dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+                kDriveTrain.kTimeoutMs);
 
-        // left_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
-        // kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
-        // left_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
-        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
-        // kDriveTrain.kTimeoutMs);
-        // left_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
-        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
-        // kDriveTrain.kTimeoutMs);
-        // left_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
-        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
-        // kDriveTrain.kTimeoutMs);
+        left_BackTalon.config_kF(kDriveTrain.kPIDLoopIdx,
+                kDriveTrain.kDistanceGains.kF, kDriveTrain.kTimeoutMs);
+        left_BackTalon.config_kP(kDriveTrain.kPIDLoopIdx,
+                pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP),
+                kDriveTrain.kTimeoutMs);
+        left_BackTalon.config_kI(kDriveTrain.kPIDLoopIdx,
+                iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI),
+                kDriveTrain.kTimeoutMs);
+        left_BackTalon.config_kD(kDriveTrain.kPIDLoopIdx,
+                dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD),
+                kDriveTrain.kTimeoutMs);
 
-        // System.out.println("P: " +
-        // pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP));
-        // System.out.println("I: " +
-        // iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI));
-        // System.out.println("D: " +
-        // dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD));
-
+        System.out.println("P: " +
+                pSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kP));
+        System.out.println("I: " +
+                iSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kI));
+        System.out.println("D: " +
+                dSlider.getDouble(Constants.kDriveTrain.kDistanceGains.kD));
     }
 
     /**

@@ -44,7 +44,7 @@ public class DriveToMidRung extends CommandBase {
 
     if (sys_drive.getValidDistance() && distance <= 1.3) {
       sys_drive.addDistance(distance);
-      System.out.println(distance);
+      // System.out.println(distance);
       System.out.println(sys_drive.measuredDistances.toString());
       distanceValid = true;
     } else {
