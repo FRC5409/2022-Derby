@@ -40,7 +40,7 @@ public class DriveToMidRung extends CommandBase {
     double distance = sys_drive.getDistance();
 
     if (!distanceValid)
-      sys_drive.tankDrive(0.5f, 0.5f);
+      sys_drive.tankDrive(0.7f, 0.7f);
 
     if (sys_drive.getValidDistance() && distance <= 1.3) {
       sys_drive.addDistance(distance);

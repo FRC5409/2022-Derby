@@ -6,6 +6,8 @@
       "/LiveWindow/Pigeon": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon SRX [1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon SRX [2]": "Motor Controller",
       "/SmartDashboard/DriveMode Data": "Command",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     }

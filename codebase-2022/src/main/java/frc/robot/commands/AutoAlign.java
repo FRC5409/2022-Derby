@@ -15,6 +15,5 @@ public class AutoAlign extends SequentialCommandGroup {
                 new TurnToAngle(driveTrain, pigeon, toAngle),
                 new DriveToMidRung(driveTrain),
                 new MoveToPosition(driveTrain));
-
     }
 }

@@ -17,6 +17,8 @@ public class TurnToAngle extends CommandBase {
   private final double angle;
   private double startAngle;
 
+  double range;
+
   /**
    * Creates a new ExampleCommand.
    *
@@ -34,20 +36,34 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("Turning to angle");
-    startAngle = sys_pigeon.getAngle();
+    startAngle = Math.abs(sys_pigeon.getAngle() % 360);
+
+    range = Math.abs(angle - startAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double left = -(1 * Math.abs((angle - (sys_pigeon.getAngle() % 360)) / startAngle));
-    double right = (1 * Math.abs((angle - (sys_pigeon.getAngle() % 360)) / startAngle));
+    double cAngle = Math.abs(sys_pigeon.getAngle() % 360);
 
-    if (Math.abs(left) < 0.5)
-      left = -0.5;
+    System.out.println(cAngle);
 
-    if (Math.abs(right) < 0.5)
-      right = 0.5;
+    int sign = ((cAngle + startAngle) / range < 0) ? -1 : 1;
+    // double left = -(1 * Math.pow(Math.abs(angle) - Math.abs(sys_pigeon.getAngle() % 360) / Math.abs(angle), 2));
+    // double right = (1 * Math.pow(Math.abs(angle) - Math.abs(sys_pigeon.getAngle() % 360) / Math.abs(angle), 2));
+
+    double left = -(1 - sign * Math.pow((cAngle - startAngle) / range, 3));
+    double right = (1 - sign * Math.pow((cAngle - startAngle) / range, 3));
+
+    System.out.println(right);
+
+
+
+    // if (Math.abs(left) < 0.8)
+    //   left = -0.8;
+
+    // if (Math.abs(right) < 0.8)
+    //   right = 0.8;
 
     sys_drive.tankDrive((float) left, (float) right);
   }
