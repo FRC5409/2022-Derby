@@ -19,11 +19,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 public final class Constants {
     public static class kDriveTrain {   
         // Motor CAN IDs
-        public static final int CAN_RIGHT_FRONT_TALON = 2;
-        public static final int CAN_RIGHT_BACK_TALON = 4;
+        public static final int kLeftDriveFront = 14;
+        public static final int kLeftDriveRear = 4;
         
-        public static final int CAN_LEFT_FRONT_TALON = 1;
-        public static final int CAN_LEFT_BACK_TALON = 3;
+        public static final int kRightDriveRear = 6;
+        public static final int kRightDriveFront = 15;
 
         // Drive mode constants
         public static final int ARCADE_DRIVE = 1; // Arcade Drive

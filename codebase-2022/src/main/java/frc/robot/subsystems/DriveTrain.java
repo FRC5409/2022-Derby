@@ -8,6 +8,10 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ExternalFollower;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -23,10 +27,10 @@ import frc.robot.Constants.kDriveTrain;
  * DriveTrain subsystem
  */
 public class DriveTrain extends SubsystemBase {
-    private final WPI_TalonSRX right_FrontTalon;
-    private final WPI_TalonSRX right_BackTalon;
-    private final WPI_TalonSRX left_FrontTalon;
-    private final WPI_TalonSRX left_BackTalon;
+    private final CANSparkMax mot_leftDriveFront_sparkmax_C14;
+    private final CANSparkMax mot_rightDriveFront_sparkmax_C15;
+    private final CANSparkMax mot_leftDriveRear_sparkmax_C4;
+    private final CANSparkMax mot_rightDriveRear_sparkmax_C6;
 
     private final DifferentialDrive m_drive;
     private int m_driveMode = kDriveTrain.AADL_DRIVE;
@@ -40,47 +44,83 @@ public class DriveTrain extends SubsystemBase {
 
     /** Creates a new DriveTrain. */
     public DriveTrain() {
+        mot_leftDriveFront_sparkmax_C14 = new CANSparkMax(Constants.kDriveTrain.kLeftDriveFront, MotorType.kBrushless);
+    
+        mot_leftDriveFront_sparkmax_C14.restoreFactoryDefaults();
+        mot_leftDriveFront_sparkmax_C14.setIdleMode(IdleMode.kBrake);
+        mot_leftDriveFront_sparkmax_C14.setSmartCurrentLimit(60);
+        mot_leftDriveFront_sparkmax_C14.setInverted(true);
+        mot_leftDriveFront_sparkmax_C14.burnFlash();
+    
+        mot_leftDriveRear_sparkmax_C4 = new CANSparkMax(Constants.kDriveTrain.kLeftDriveRear, MotorType.kBrushless);
+        mot_leftDriveRear_sparkmax_C4.restoreFactoryDefaults();
+        mot_leftDriveRear_sparkmax_C4.setIdleMode(IdleMode.kBrake);
+        mot_leftDriveRear_sparkmax_C4.setSmartCurrentLimit(60);
+        mot_leftDriveRear_sparkmax_C4.setInverted(true);
+        
+        mot_leftDriveFront_sparkmax_C14.follow(ExternalFollower.kFollowerDisabled, 0);
+    
+        mot_leftDriveRear_sparkmax_C4.follow(mot_leftDriveFront_sparkmax_C14);
+        mot_leftDriveRear_sparkmax_C4.burnFlash();
+    
+        mot_rightDriveFront_sparkmax_C15 = new CANSparkMax(Constants.kDriveTrain.kRightDriveFront, MotorType.kBrushless);
+        mot_rightDriveFront_sparkmax_C15.restoreFactoryDefaults();
+        mot_rightDriveFront_sparkmax_C15.setIdleMode(IdleMode.kBrake);
+        mot_rightDriveFront_sparkmax_C15.setSmartCurrentLimit(60);
+        mot_rightDriveFront_sparkmax_C15.burnFlash();
+        mot_rightDriveFront_sparkmax_C15.setInverted(false);
+    
+        mot_rightDriveRear_sparkmax_C6 = new CANSparkMax(Constants.kDriveTrain.kRightDriveRear, MotorType.kBrushless);
+        mot_rightDriveRear_sparkmax_C6.restoreFactoryDefaults();
+        mot_rightDriveRear_sparkmax_C6.setIdleMode(IdleMode.kBrake);
+        mot_rightDriveRear_sparkmax_C6.setSmartCurrentLimit(60);
+        
+        mot_rightDriveFront_sparkmax_C15.follow(ExternalFollower.kFollowerDisabled, 0);
+    
+        mot_rightDriveRear_sparkmax_C6.follow(mot_rightDriveFront_sparkmax_C15);
+        mot_rightDriveRear_sparkmax_C6.burnFlash();
+
         /**
          * ------------------ RIGHT MOTOTRS ------------------
          * Declerations: 
          */
-        right_FrontTalon = new WPI_TalonSRX(Constants.kDriveTrain.CAN_RIGHT_FRONT_TALON); // Has encoder
-        right_FrontTalon.setInverted(false);
+        // right_FrontTalon = new WPI_TalonSRX(Constants.kDriveTrain.CAN_RIGHT_FRONT_TALON); // Has encoder
+        // right_FrontTalon.setInverted(false);
 
-        right_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_RIGHT_BACK_TALON);
-        right_BackTalon.follow(right_FrontTalon);
-        right_BackTalon.setInverted(InvertType.FollowMaster);
+        // right_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_RIGHT_BACK_TALON);
+        // right_BackTalon.follow(right_FrontTalon);
+        // right_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // Configurations: 
-        right_BackTalon.configFactoryDefault();
-        right_FrontTalon.configFactoryDefault();
+        // // Configurations: 
+        // right_BackTalon.configFactoryDefault();
+        // right_FrontTalon.configFactoryDefault();
 
-        right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        // right_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        // right_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
-        right_FrontTalon.setNeutralMode(NeutralMode.Brake);
-        right_BackTalon.setNeutralMode(NeutralMode.Brake);
+        // right_FrontTalon.setNeutralMode(NeutralMode.Brake);
+        // right_BackTalon.setNeutralMode(NeutralMode.Brake);
 
-        /**
-         * ------------------ LEFT MOTOTRS ------------------
-         * Declerations: 
-         */
-        left_FrontTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_FRONT_TALON);
-        left_FrontTalon.setInverted(true);
+        // /**
+        //  * ------------------ LEFT MOTOTRS ------------------
+        //  * Declerations: 
+        //  */
+        // left_FrontTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_FRONT_TALON);
+        // left_FrontTalon.setInverted(true);
 
-        left_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_BACK_TALON); // Back left talon (follower, has encoder)
-        left_BackTalon.follow(left_FrontTalon);
-        left_BackTalon.setInverted(InvertType.FollowMaster);
+        // left_BackTalon = new WPI_TalonSRX(kDriveTrain.CAN_LEFT_BACK_TALON); // Back left talon (follower, has encoder)
+        // left_BackTalon.follow(left_FrontTalon);
+        // left_BackTalon.setInverted(InvertType.FollowMaster);
 
-        // Configurations:
-        left_FrontTalon.configFactoryDefault();
-        left_BackTalon.configFactoryDefault();
+        // // Configurations:
+        // left_FrontTalon.configFactoryDefault();
+        // left_BackTalon.configFactoryDefault();
 
-        left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
-        left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        // left_FrontTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
+        // left_BackTalon.configPeakCurrentLimit(kDriveTrain.MOTOR_CURRENT_LIMIT);
 
-        left_FrontTalon.setNeutralMode(NeutralMode.Brake);
-        left_BackTalon.setNeutralMode(NeutralMode.Brake);
+        // left_FrontTalon.setNeutralMode(NeutralMode.Brake);
+        // left_BackTalon.setNeutralMode(NeutralMode.Brake);
 
         // mot_rightFrontDrive.getStatorCurrent();
 
@@ -88,7 +128,7 @@ public class DriveTrain extends SubsystemBase {
          * ------------------ DIFFERENTIAL DRIVE ------------------
          * Decleration: 
          */
-        m_drive = new DifferentialDrive(left_FrontTalon, right_FrontTalon);
+        m_drive = new DifferentialDrive(mot_leftDriveFront_sparkmax_C14, mot_rightDriveFront_sparkmax_C15);
 
         ssl_gear = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
@@ -119,7 +159,7 @@ public class DriveTrain extends SubsystemBase {
         // }
 
         displayDriveModeData();
-        displayEncoderData();
+        //displayEncoderData();
 
         SmartDashboard.putString("Drive Mode", getDriveModeName());
 
@@ -228,16 +268,16 @@ public class DriveTrain extends SubsystemBase {
         }
     }
 
-    /**
-     * This method will display encoder data.
-     */
-    public void displayEncoderData() {
-        SmartDashboard.putNumber("MOT_RB_VEL", right_BackTalon.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("MOT_RB_POS", right_BackTalon.getSelectedSensorPosition());
+    // /**
+    //  * This method will display encoder data.
+    //  */
+    // public void displayEncoderData() {
+    //     SmartDashboard.putNumber("MOT_RB_VEL", right_BackTalon.getSelectedSensorVelocity());
+    //     SmartDashboard.putNumber("MOT_RB_POS", right_BackTalon.getSelectedSensorPosition());
 
-        SmartDashboard.putNumber("MOT_LB_VEL", left_BackTalon.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("MOT_LB_POS", left_BackTalon.getSelectedSensorPosition());
-    }
+    //     SmartDashboard.putNumber("MOT_LB_VEL", left_BackTalon.getSelectedSensorVelocity());
+    //     SmartDashboard.putNumber("MOT_LB_POS", left_BackTalon.getSelectedSensorPosition());
+    // }
 
     /**
      * This method will move the robot in a direction based on the given parameters
